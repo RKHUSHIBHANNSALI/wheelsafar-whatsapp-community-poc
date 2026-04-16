@@ -11,3 +11,5 @@ whatsapp-sender/.wwebjs_cache/
 .env
 .env.*
 !.env.example
+
+public/maps/
