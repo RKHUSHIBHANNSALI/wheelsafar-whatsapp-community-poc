@@ -1,0 +1,15 @@
+[Unit]
+Description=Community Event WhatsApp Sender
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/community-event-poc/whatsapp-sender
+EnvironmentFile=/home/ubuntu/community-event-poc/.env
+ExecStart=/usr/bin/env node /home/ubuntu/community-event-poc/whatsapp-sender/server.js
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

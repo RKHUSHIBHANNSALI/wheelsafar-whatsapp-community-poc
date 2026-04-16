@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+events.db
+.DS_Store
+
+whatsapp-sender/node_modules/
+whatsapp-sender/.wwebjs_auth/
+whatsapp-sender/.wwebjs_cache/
+
+.env
+.env.*
+!.env.example

@@ -1,0 +1,15 @@
+[Unit]
+Description=Community Event FastAPI Backend
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/community-event-poc
+EnvironmentFile=/home/ubuntu/community-event-poc/.env
+ExecStart=/home/ubuntu/community-event-poc/.venv/bin/python -m uvicorn main:app --host 127.0.0.1 --port 8000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
