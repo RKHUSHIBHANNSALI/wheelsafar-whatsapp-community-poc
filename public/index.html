@@ -3,18 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Community Event POC</title>
+    <title>Wheelsafar Garage Sale</title>
     <style>
       :root {
         color-scheme: light;
-        --bg: #f4efe4;
-        --panel: rgba(255, 252, 245, 0.92);
-        --panel-strong: #fffaf0;
+        --bg: #f8f0e3;
+        --paper: rgba(255, 251, 245, 0.94);
+        --panel: #fffaf2;
         --ink: #1f1a16;
-        --muted: #6c6258;
-        --accent: #c4542e;
-        --accent-dark: #9e3f1d;
-        --line: rgba(73, 52, 37, 0.16);
+        --muted: #73655a;
+        --accent: #ffcc05;
+        --accent-deep: #f49b10;
+        --line: rgba(89, 64, 45, 0.14);
         --success: #21673d;
         --warning: #9a5d07;
         --danger: #a12828;
@@ -27,23 +27,23 @@
       body {
         margin: 0;
         min-height: 100vh;
-        font-family: Georgia, "Times New Roman", serif;
+        font-family: "Lexend", "Segoe UI", sans-serif;
         color: var(--ink);
         background:
-          radial-gradient(circle at top left, rgba(255, 196, 153, 0.8), transparent 28%),
-          radial-gradient(circle at right bottom, rgba(214, 193, 164, 0.7), transparent 30%),
-          linear-gradient(155deg, #f7f2e9 0%, #eedfcc 100%);
+          radial-gradient(circle at top left, rgba(255, 220, 173, 0.8), transparent 30%),
+          radial-gradient(circle at bottom right, rgba(255, 204, 5, 0.2), transparent 25%),
+          linear-gradient(140deg, #f9f3eb 0%, #efe3d1 100%);
       }
 
       .shell {
-        max-width: 1240px;
+        max-width: 1320px;
         margin: 0 auto;
-        padding: 36px 20px 60px;
+        padding: 28px 18px 56px;
       }
 
       .hero {
         display: grid;
-        gap: 14px;
+        gap: 12px;
         margin-bottom: 24px;
       }
 
@@ -51,9 +51,9 @@
         width: fit-content;
         padding: 8px 12px;
         border-radius: 999px;
-        background: rgba(196, 84, 46, 0.14);
-        color: var(--accent-dark);
-        font-size: 0.76rem;
+        background: rgba(255, 204, 5, 0.24);
+        color: #6d4d00;
+        font-size: 0.78rem;
         font-weight: 700;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -61,129 +61,357 @@
 
       h1 {
         margin: 0;
-        font-size: clamp(2.2rem, 5vw, 4.6rem);
-        line-height: 0.96;
+        font-size: clamp(2.3rem, 5vw, 4.8rem);
+        line-height: 0.95;
         letter-spacing: -0.05em;
       }
 
       .lede {
-        max-width: 820px;
+        max-width: 900px;
         margin: 0;
-        font-size: 1.08rem;
-        line-height: 1.65;
+        font-size: 1.05rem;
+        line-height: 1.7;
         color: var(--muted);
       }
 
       .layout {
         display: grid;
-        grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
-        gap: 20px;
+        grid-template-columns: minmax(0, 1.2fr) minmax(310px, 0.8fr);
+        gap: 22px;
       }
 
       .card {
-        background: var(--panel);
-        backdrop-filter: blur(12px);
         border: 1px solid var(--line);
-        border-radius: 26px;
-        box-shadow: 0 18px 50px rgba(66, 43, 29, 0.08);
+        border-radius: 28px;
+        background: var(--paper);
+        box-shadow: 0 22px 50px rgba(78, 54, 38, 0.08);
       }
 
-      .form-card {
+      .wizard-card {
+        overflow: hidden;
+      }
+
+      .progress-shell {
+        padding: 24px 26px 18px;
+        background: linear-gradient(135deg, #ffcc05 0%, #ffd95d 100%);
+      }
+
+      .progress-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .progress-title {
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: #563c00;
+      }
+
+      .progress-meta {
+        font-size: 0.88rem;
+        color: rgba(31, 26, 22, 0.75);
+      }
+
+      .progress-bar {
+        margin-top: 14px;
+        height: 9px;
+        border-radius: 999px;
+        background: rgba(31, 26, 22, 0.14);
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 14%;
+        border-radius: 999px;
+        background: #1f1a16;
+        transition: width 0.25s ease;
+      }
+
+      .wizard-body {
         padding: 26px;
       }
 
-      .side-stack {
+      .step-header {
+        display: grid;
+        gap: 8px;
+        margin-bottom: 26px;
+      }
+
+      .step-kicker {
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #9c7118;
+      }
+
+      .step-header h2 {
+        margin: 0;
+        font-size: 2rem;
+      }
+
+      .step-header p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .choice-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 16px;
+      }
+
+      .choice-card,
+      .pill-option {
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: #fffdf8;
+        color: #4f3a27;
+        cursor: pointer;
+        transition: 0.22s ease;
+      }
+
+      .choice-card {
+        padding: 22px 16px;
+        text-align: center;
+      }
+
+      .choice-card:hover,
+      .pill-option:hover,
+      .choice-card.active,
+      .pill-option.active {
+        transform: translateY(-2px);
+        border-color: rgba(244, 155, 16, 0.65);
+        box-shadow: 0 14px 24px rgba(255, 204, 5, 0.16);
+        background: #fff1ae;
+      }
+
+      .pill-option {
+        border: 1.5px solid rgba(120, 88, 43, 0.28);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+      }
+
+      .pill-option:not(.active) {
+        background: #fffaf2;
+        color: #684d2f;
+      }
+
+      .pill-option:hover:not(.active) {
+        background: #fff4d1;
+        color: #3f2d16;
+      }
+
+      .pill-option.active {
+        border-color: rgba(214, 155, 16, 0.8);
+        color: #4b3200;
+        background: linear-gradient(135deg, #ffe382 0%, #ffd046 100%);
+      }
+
+      .choice-icon {
+        font-size: 2rem;
+        margin-bottom: 12px;
+      }
+
+      .choice-label {
+        font-weight: 600;
+        line-height: 1.35;
+      }
+
+      .pill-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .pill-option {
+        padding: 13px 16px;
+        font-weight: 600;
+      }
+
+      .section {
         display: grid;
         gap: 20px;
       }
 
-      .status-card,
-      .events-card {
+      .summary-strip {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .summary-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(214, 155, 16, 0.32);
+        background: #fff2bf;
+        color: #5a4000;
+        font-size: 0.88rem;
+        font-weight: 600;
+      }
+
+      .summary-pill strong {
+        color: #2f2415;
+      }
+
+      .panel {
         padding: 22px;
+        border-radius: 22px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.56);
       }
 
-      h2 {
-        margin: 0 0 8px;
-        font-size: 1.65rem;
+      .panel h3 {
+        margin: 0 0 16px;
+        font-size: 1.1rem;
       }
 
-      .subtle {
-        margin: 0 0 18px;
-        color: var(--muted);
-        line-height: 1.55;
-      }
-
-      form {
-        display: grid;
-        gap: 18px;
-      }
-
-      .two-col {
+      .form-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 16px;
       }
 
+      .form-grid.single {
+        grid-template-columns: 1fr;
+      }
+
       label {
         display: grid;
         gap: 8px;
-        font-size: 0.95rem;
-        font-weight: 700;
+        font-size: 0.92rem;
+        font-weight: 600;
       }
 
       input,
+      select,
       textarea {
         width: 100%;
-        border: 1px solid rgba(77, 57, 43, 0.22);
+        border: 1px solid rgba(73, 52, 37, 0.2);
         border-radius: 16px;
-        background: var(--panel-strong);
-        padding: 14px 15px;
+        background: #fffef9;
+        padding: 13px 14px;
         font: inherit;
         color: inherit;
       }
 
       textarea {
-        min-height: 140px;
+        min-height: 120px;
         resize: vertical;
       }
 
       input:focus,
+      select:focus,
       textarea:focus {
-        outline: 2px solid rgba(196, 84, 46, 0.2);
-        border-color: var(--accent);
+        outline: 2px solid rgba(255, 204, 5, 0.28);
+        border-color: #d69b10;
       }
 
-      .actions {
+      .inline-help {
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      .radio-stack,
+      .checkbox-stack {
+        display: grid;
+        gap: 10px;
+      }
+
+      .radio-item,
+      .checkbox-item {
         display: flex;
-        align-items: center;
+        gap: 10px;
+        align-items: flex-start;
+        padding: 12px 14px;
+        border-radius: 16px;
+        border: 1px solid var(--line);
+        background: #fffef9;
+        font-weight: 500;
+      }
+
+      .radio-item input,
+      .checkbox-item input {
+        width: auto;
+        margin-top: 3px;
+      }
+
+      .photo-row {
+        display: grid;
         gap: 14px;
+      }
+
+      .photo-list {
+        display: flex;
         flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .photo-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        background: #fff0b7;
+        border: 1px solid rgba(214, 155, 16, 0.3);
+        font-size: 0.86rem;
+      }
+
+      .photo-chip button {
+        padding: 0;
+        min-width: 20px;
+        background: transparent;
+        color: inherit;
+      }
+
+      .wizard-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 24px;
       }
 
       button {
         appearance: none;
         border: 0;
         border-radius: 999px;
-        background: var(--accent);
-        color: #fff6ef;
+        background: #1f1a16;
+        color: #fff8ef;
         padding: 14px 22px;
         font: inherit;
         font-weight: 700;
         cursor: pointer;
       }
 
-      button:hover {
-        background: var(--accent-dark);
+      button.alt {
+        background: rgba(31, 26, 22, 0.08);
+        color: #1f1a16;
+      }
+
+      button.gold {
+        background: var(--accent-deep);
       }
 
       button:disabled {
-        opacity: 0.7;
-        cursor: progress;
+        opacity: 0.5;
+        cursor: not-allowed;
       }
 
-      .inline-note {
-        color: var(--muted);
-        font-size: 0.92rem;
+      .side-stack {
+        display: grid;
+        gap: 22px;
+      }
+
+      .status-card,
+      .listings-card {
+        padding: 24px;
       }
 
       .status-box {
@@ -207,25 +435,25 @@
         color: var(--danger);
       }
 
-      .event-list {
+      .listing-list {
         display: grid;
         gap: 14px;
       }
 
-      .event-item {
-        border: 1px solid var(--line);
-        border-radius: 20px;
+      .listing-item {
         padding: 16px;
+        border-radius: 20px;
+        border: 1px solid var(--line);
         background: rgba(255, 255, 255, 0.58);
       }
 
-      .event-item h3 {
+      .listing-item h3 {
         margin: 0 0 8px;
-        font-size: 1.2rem;
+        font-size: 1.08rem;
       }
 
-      .event-meta,
-      .event-body {
+      .listing-meta,
+      .listing-body {
         margin: 0;
         color: var(--muted);
         line-height: 1.55;
@@ -240,7 +468,6 @@
         font-size: 0.8rem;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
       }
 
       .pill.forwarded,
@@ -249,15 +476,9 @@
         color: var(--success);
       }
 
-      .pill.failed,
-      .pill.error {
+      .pill.failed {
         background: rgba(161, 40, 40, 0.12);
         color: var(--danger);
-      }
-
-      .pill.skipped {
-        background: rgba(154, 93, 7, 0.14);
-        color: var(--warning);
       }
 
       .empty {
@@ -265,14 +486,16 @@
         color: var(--muted);
       }
 
-      @media (max-width: 920px) {
+      @media (max-width: 980px) {
         .layout,
-        .two-col {
+        .form-grid {
           grid-template-columns: 1fr;
         }
 
-        .shell {
-          padding: 24px 14px 40px;
+        .wizard-body,
+        .status-card,
+        .listings-card {
+          padding: 18px;
         }
       }
     </style>
@@ -280,75 +503,39 @@
   <body>
     <main class="shell">
       <section class="hero">
-        <div class="eyebrow">Event to WhatsApp POC</div>
-        <h1>Capture a community event, save it in the backend, then forward it to WhatsApp.</h1>
+        <div class="eyebrow">Wheelsafar Garage Sale</div>
+        <h1>Build a category-aware listing, save it, then push it to the WhatsApp group.</h1>
         <p class="lede">
-          This proof of concept keeps the flow simple: the browser submits the form to FastAPI, FastAPI stores the event in SQLite, and then it tries to forward the same event to a WhatsApp sender service.
+          This wizard follows the Miro flow: category decides the next questions, some categories skip steps, and the final listing is stored in the backend before being forwarded to the community group.
         </p>
       </section>
 
       <section class="layout">
-        <article class="card form-card">
-          <h2>Event Submission Form</h2>
-          <p class="subtle">Use this to validate the full path from frontend to backend to WhatsApp forwarding.</p>
-
-          <form id="event-form">
-            <div class="two-col">
-              <label>
-                Organizer name
-                <input name="organizer_name" placeholder="Rahul Verma" required minlength="2" />
-              </label>
-              <label>
-                Phone number
-                <input name="phone_number" placeholder="919876543210" required minlength="8" />
-              </label>
+        <article class="card wizard-card">
+          <div class="progress-shell">
+            <div class="progress-row">
+              <div class="progress-title" id="progress-title">Step 1</div>
+              <div class="progress-meta" id="progress-meta">Category selection</div>
             </div>
-
-            <label>
-              Event title
-              <input name="title" placeholder="Blood Donation Camp" required minlength="3" />
-            </label>
-
-            <div class="two-col">
-              <label>
-                Event date
-                <input name="event_date" placeholder="20 April 2026, 11:00 AM" required minlength="3" />
-              </label>
-              <label>
-                Location
-                <input name="location" placeholder="Pune Community Hall" required minlength="2" />
-              </label>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progress-fill"></div>
             </div>
-
-            <label>
-              Description
-              <textarea
-                name="description"
-                placeholder="Share the purpose of the event, who can attend, and any instructions for the community."
-                required
-                minlength="10"
-              ></textarea>
-            </label>
-
-            <div class="actions">
-              <button type="submit" id="submit-button">Save and Forward</button>
-              <span class="inline-note" id="submit-note">Backend default mode is mock forwarding until the Node sender service is running.</span>
-            </div>
-          </form>
+          </div>
+          <div class="wizard-body" id="wizard-root"></div>
         </article>
 
         <section class="side-stack">
           <article class="card status-card">
             <h2>Submission Status</h2>
-            <p class="subtle">You will see whether the event saved locally and whether forwarding was mocked, sent, skipped, or failed.</p>
-            <div class="status-box" id="status-box">Waiting for a submission.</div>
+            <p class="inline-help">The listing is saved first, then the backend attempts WhatsApp forwarding to the group.</p>
+            <div class="status-box" id="status-box">Waiting for your first listing.</div>
           </article>
 
-          <article class="card events-card">
-            <h2>Recent Events</h2>
-            <p class="subtle">This list is loaded from the backend so we can confirm the data actually persisted.</p>
-            <div class="event-list" id="event-list">
-              <p class="empty">No events submitted yet.</p>
+          <article class="card listings-card">
+            <h2>Recent Listings</h2>
+            <p class="inline-help">These are loaded from the backend so we can validate the listing payload and WhatsApp status.</p>
+            <div class="listing-list" id="listing-list">
+              <p class="empty">No listings submitted yet.</p>
             </div>
           </article>
         </section>
@@ -356,114 +543,832 @@
     </main>
 
     <script>
-      const form = document.getElementById("event-form");
-      const submitButton = document.getElementById("submit-button");
+      const categories = [
+        { id: "motorcycle", label: "Motorcycle", icon: "🏍️" },
+        { id: "riding-gears", label: "Riding Gears", icon: "🧥" },
+        { id: "luggage", label: "Luggage", icon: "🎒" },
+        { id: "accessories", label: "Accessories & Spare Parts", icon: "🔧" },
+        { id: "technology", label: "Technology & Gadgets", icon: "📱" },
+      ];
+
+      const typesByCategory = {
+        motorcycle: [],
+        "riding-gears": [
+          { id: "boots", label: "Boots", icon: "🥾" },
+          { id: "helmet", label: "Helmet", icon: "🪖" },
+          { id: "jacket", label: "Jacket", icon: "🧥" },
+          { id: "pant", label: "Pant", icon: "👖" },
+          { id: "gloves", label: "Gloves", icon: "🧤" },
+        ],
+        luggage: [
+          { id: "tank-bag", label: "Tank Bag", icon: "🧳" },
+          { id: "tail-bag", label: "Tail Bag", icon: "🎒" },
+          { id: "saddle-bags", label: "Saddle Bags", icon: "👜" },
+          { id: "crash-bar-bags", label: "Crash Bar Bags", icon: "🧰" },
+          { id: "topbox", label: "Topbox", icon: "📦" },
+          { id: "panniers", label: "Panniers", icon: "🧳" },
+          { id: "backpack", label: "Backpack / Hydration Bag", icon: "🎒" },
+          { id: "other", label: "Other", icon: "➕" },
+        ],
+      };
+
+      const motorcycleBrands = ["Royal Enfield", "Hero", "Honda", "Bajaj", "TVS", "Yamaha", "Suzuki", "KTM", "Triumph", "Other"];
+      const conditions = ["Excellent", "Good", "Fair", "Needs work"];
+      const ownerCounts = ["1st Owner", "2nd Owner", "3rd Owner", "4+ Owners"];
+      const callPreferences = [
+        { id: "whatsapp", label: "Drop me a message on WhatsApp" },
+        { id: "call", label: "Call me directly" },
+        { id: "both", label: "Okay with both" },
+      ];
+      const saleTimelines = ["Urgent", "Soon", "I will wait for the right buyer"];
+      const years = Array.from({ length: 26 }, (_, index) => `${new Date().getFullYear() - index}`);
+
+      const defaultState = () => ({
+        category: "",
+        type: "",
+        custom_type_title: "",
+        size: "",
+        size_system: "",
+        brand: "",
+        model: "",
+        purchase_year: "",
+        condition: "",
+        colour: "",
+        price: "",
+        price_type: "fixed",
+        used: "",
+        owner_count: "",
+        year: "",
+        location: "",
+        sale_timeline: "",
+        mfg: "",
+        odo: "",
+        reg: "",
+        description: "",
+        photos_names: [],
+        reason: "",
+        seller_name: "",
+        seller_phone: "",
+        location_consent: false,
+        call_preference: "whatsapp",
+      });
+
+      const stepOrder = ["category", "type", "size", "details", "photos", "reason", "seller"];
+      let stepIndex = 0;
+      let formState = defaultState();
+
+      const wizardRoot = document.getElementById("wizard-root");
+      const progressFill = document.getElementById("progress-fill");
+      const progressTitle = document.getElementById("progress-title");
+      const progressMeta = document.getElementById("progress-meta");
       const statusBox = document.getElementById("status-box");
-      const eventList = document.getElementById("event-list");
+      const listingList = document.getElementById("listing-list");
+
+      function currentStep() {
+        return stepOrder[stepIndex];
+      }
+
+      function visibleSteps() {
+        const steps = ["category"];
+        if (formState.category && formState.category !== "motorcycle") {
+          steps.push("type");
+        }
+        if (formState.category && formState.category !== "accessories" && formState.category !== "technology") {
+          steps.push("size");
+        }
+        if (formState.category) {
+          steps.push("details", "photos", "reason", "seller");
+        }
+        return steps;
+      }
+
+      function nextStepId(step) {
+        if (step === "category") {
+          return formState.category === "motorcycle" ? "size" : "type";
+        }
+        if (step === "type") {
+          if (formState.category === "accessories" || formState.category === "technology") {
+            return "details";
+          }
+          return "size";
+        }
+        if (step === "size") return "details";
+        if (step === "details") return "photos";
+        if (step === "photos") return "reason";
+        if (step === "reason") return "seller";
+        return "seller";
+      }
+
+      function prevStepId(step) {
+        if (step === "seller") return "reason";
+        if (step === "reason") return "photos";
+        if (step === "photos") return "details";
+        if (step === "details") {
+          if (formState.category === "accessories" || formState.category === "technology") return "type";
+          return "size";
+        }
+        if (step === "size") {
+          return formState.category === "motorcycle" ? "category" : "type";
+        }
+        if (step === "type") return "category";
+        return "category";
+      }
+
+      function goNext() {
+        stepIndex = stepOrder.indexOf(nextStepId(currentStep()));
+        renderWizard();
+      }
+
+      function goBack() {
+        stepIndex = stepOrder.indexOf(prevStepId(currentStep()));
+        renderWizard();
+      }
 
       function setStatus(kind, message) {
         statusBox.className = `status-box ${kind}`;
         statusBox.textContent = message;
       }
 
+      function listingTitle(listing) {
+        return listing.listing_title || `${listing.details.brand} ${listing.details.model}`.trim();
+      }
+
+      function typeLabel() {
+        return formState.custom_type_title || formState.type;
+      }
+
+      function categoryLabel(categoryId) {
+        return categories.find((category) => category.id === categoryId)?.label || categoryId;
+      }
+
+      function getSizeOptions() {
+        if (formState.category === "motorcycle") {
+          return ["0 to 250cc", "250 cc to 650cc", "650 cc & above"];
+        }
+        if (formState.category === "riding-gears") {
+          if (formState.type === "boots") {
+            return ["5", "6", "7", "8", "9", "10", "11", "12", "13"];
+          }
+          if (formState.type === "helmet") {
+            return ["XS", "S", "M", "L", "XL", "2XL"];
+          }
+          return ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"];
+        }
+        return [];
+      }
+
+      function isStepValid(step) {
+        if (step === "category") return Boolean(formState.category);
+        if (step === "type") {
+          if (formState.category === "accessories" || formState.category === "technology") {
+            return formState.type.trim().length > 1;
+          }
+          if (formState.category === "luggage" && formState.type === "other") {
+            return formState.custom_type_title.trim().length > 1;
+          }
+          return Boolean(formState.type);
+        }
+        if (step === "size") {
+          if (formState.category === "luggage") {
+            return formState.size.trim().length > 0;
+          }
+          if (formState.category === "riding-gears" && formState.type === "boots") {
+            return Boolean(formState.size_system) && Boolean(formState.size);
+          }
+          if (formState.category === "accessories" || formState.category === "technology") {
+            return true;
+          }
+          return Boolean(formState.size);
+        }
+        if (step === "details") return true;
+        if (step === "photos") return formState.photos_names.length <= 2;
+        if (step === "reason") return true;
+        if (step === "seller") {
+          return formState.seller_name.trim().length >= 2 &&
+            formState.seller_phone.trim().length >= 8;
+        }
+        return true;
+      }
+
+      function renderChoiceCards(items, selectedValue, onSelect) {
+        return `
+          <div class="choice-grid">
+            ${items.map((item) => `
+              <button type="button" class="choice-card ${selectedValue === item.id ? "active" : ""}" data-action="${onSelect}" data-value="${item.id}">
+                <div class="choice-icon">${item.icon || "•"}</div>
+                <div class="choice-label">${item.label}</div>
+              </button>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      function renderCategoryStep() {
+        return `
+          <div class="step-header">
+            <div class="step-kicker">Choosing Category</div>
+            <h2>What are you selling?</h2>
+            <p>Start with the top-level garage sale category from the reference flow.</p>
+          </div>
+          ${renderChoiceCards(categories, formState.category, "choose-category")}
+        `;
+      }
+
+      function renderTypeStep() {
+        if (formState.category === "accessories" || formState.category === "technology") {
+          return `
+            <div class="step-header">
+              <div class="step-kicker">Choosing Type</div>
+              <h2>Describe the product type</h2>
+              <p>The flowchart shows a free-text type field for accessories and gadgets, so use a clear searchable name.</p>
+            </div>
+            <div class="panel">
+              <label>
+                Type
+                <input id="type-input" value="${formState.type}" placeholder="Phone mount, intercom, action camera, crash guard..." />
+              </label>
+            </div>
+          `;
+        }
+
+        const types = typesByCategory[formState.category] || [];
+        return `
+          <div class="step-header">
+            <div class="step-kicker">Choosing Type</div>
+            <h2>Select the listing type</h2>
+            <p>This step follows the category branches from your Miro flowchart.</p>
+          </div>
+          ${renderChoiceCards(types, formState.type, "choose-type")}
+          ${formState.category === "luggage" && formState.type === "other" ? `
+            <div class="panel" style="margin-top:18px">
+              <label>
+                Other luggage type
+                <input id="custom-type-input" value="${formState.custom_type_title}" placeholder="Hydration pack, seat bag, rain cover..." />
+              </label>
+            </div>
+          ` : ""}
+        `;
+      }
+
+      function renderSizeStep() {
+        if (formState.category === "luggage") {
+          return `
+          <div class="step-header">
+            <div class="step-kicker">Size</div>
+            <h2>Enter capacity</h2>
+            <p>Luggage follows the flowchart path with a numeric litres field.</p>
+          </div>
+          <div class="summary-strip" style="margin-bottom: 18px;">
+            <div class="summary-pill"><strong>Category:</strong> ${categoryLabel(formState.category)}</div>
+            <div class="summary-pill"><strong>Type:</strong> ${typeLabel() || "Choose type"}</div>
+          </div>
+          <div class="panel">
+            <label>
+              Capacity in litres
+                <input id="capacity-input" type="number" min="1" value="${formState.size}" placeholder="20" />
+              </label>
+            </div>
+          `;
+        }
+
+        if (formState.category === "riding-gears" && formState.type === "boots") {
+          return `
+            <div class="step-header">
+              <div class="step-kicker">Size</div>
+              <h2>Select the exact boot size</h2>
+              <p>Boots need both the size system and the exact numeric size.</p>
+            </div>
+            <div class="summary-strip" style="margin-bottom: 18px;">
+              <div class="summary-pill"><strong>Category:</strong> ${categoryLabel(formState.category)}</div>
+              <div class="summary-pill"><strong>Type:</strong> ${typeLabel() || "Choose type"}</div>
+            </div>
+            <div class="panel" style="margin-bottom: 18px;">
+              <h3>Size system</h3>
+              <div class="pill-grid">
+                ${["UK", "US"].map((option) => `
+                  <button type="button" class="pill-option ${formState.size_system === option ? "active" : ""}" data-action="choose-size-system" data-value="${option}">
+                    ${option}
+                  </button>
+                `).join("")}
+              </div>
+            </div>
+            <div class="panel">
+              <h3>Exact size</h3>
+              <div class="pill-grid">
+                ${getSizeOptions().map((option) => `
+                  <button type="button" class="pill-option ${formState.size === option ? "active" : ""}" data-action="choose-size" data-value="${option}">
+                    ${option}
+                  </button>
+                `).join("")}
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="step-header">
+            <div class="step-kicker">Size</div>
+            <h2>${formState.category === "motorcycle" ? "Choose the engine band" : "Choose the exact size"}</h2>
+            <p>${formState.category === "motorcycle" ? "Motorcycles use CC bands." : "Pick the actual size value for this listing."}</p>
+          </div>
+          <div class="summary-strip" style="margin-bottom: 18px;">
+            <div class="summary-pill"><strong>Category:</strong> ${categoryLabel(formState.category)}</div>
+            ${formState.category !== "motorcycle" ? `<div class="summary-pill"><strong>Type:</strong> ${typeLabel() || "Choose type"}</div>` : ""}
+          </div>
+          <div class="pill-grid">
+            ${getSizeOptions().map((option) => `
+              <button type="button" class="pill-option ${formState.size === option ? "active" : ""}" data-action="choose-size" data-value="${option}">
+                ${option}
+              </button>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      function renderDetailsStep() {
+        const isMotorcycle = formState.category === "motorcycle";
+        const isAccessories = formState.category === "accessories" || formState.category === "technology";
+
+        return `
+          <div class="step-header">
+            <div class="step-kicker">Details</div>
+            <h2>Capture the listing details</h2>
+            <p>This section mirrors the branching fields from your diagram: motorcycles get owner/odometer fields, while accessories and gadgets get condition and used status.</p>
+          </div>
+          <div class="section">
+            <div class="panel">
+              <h3>Selected listing summary</h3>
+              <div class="summary-strip">
+                <div class="summary-pill"><strong>Category:</strong> ${categoryLabel(formState.category)}</div>
+                ${typeLabel() ? `<div class="summary-pill"><strong>Type:</strong> ${typeLabel()}</div>` : ""}
+                ${formState.size ? `<div class="summary-pill"><strong>Size:</strong> ${formState.size_system ? `${formState.size_system} ` : ""}${formState.size}</div>` : ""}
+              </div>
+            </div>
+            <div class="panel">
+              <h3>Listing basics</h3>
+              <div class="form-grid">
+                <label>
+                  Brand
+                  ${isMotorcycle ? `
+                    <select id="brand-select">
+                      <option value="">Select brand</option>
+                      ${motorcycleBrands.map((brand) => `<option value="${brand}" ${formState.brand === brand ? "selected" : ""}>${brand}</option>`).join("")}
+                    </select>
+                  ` : `<input id="brand-input" value="${formState.brand}" placeholder="Alpinestars, Rynox, Viaterra..." />`}
+                </label>
+                <label>
+                  Model
+                  <input id="model-input" value="${formState.model}" placeholder="Model name" />
+                </label>
+                <label>
+                  Purchase year
+                  <select id="purchase-year-select">
+                    <option value="">Select year</option>
+                    ${years.map((year) => `<option value="${year}" ${formState.purchase_year === year ? "selected" : ""}>${year}</option>`).join("")}
+                  </select>
+                </label>
+                <label>
+                  Location
+                  <input id="location-input" value="${formState.location}" placeholder="City / locality" />
+                </label>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h3>Price & sale intent</h3>
+              <div class="form-grid">
+                <label>
+                  Price
+                  <input id="price-input" type="number" min="1" value="${formState.price}" placeholder="5000" />
+                </label>
+                <label>
+                  Price type
+                  <select id="price-type-select">
+                    <option value="fixed" ${formState.price_type === "fixed" ? "selected" : ""}>Fixed</option>
+                    <option value="negotiable" ${formState.price_type === "negotiable" ? "selected" : ""}>Negotiable</option>
+                  </select>
+                </label>
+                <label>
+                  Sale timeline
+                  <select id="sale-timeline-select">
+                    <option value="">Select timeline</option>
+                    ${saleTimelines.map((timeline) => `<option value="${timeline}" ${formState.sale_timeline === timeline ? "selected" : ""}>${timeline}</option>`).join("")}
+                  </select>
+                </label>
+                ${isAccessories ? `
+                  <label>
+                    Condition
+                    <select id="condition-select">
+                      <option value="">Select condition</option>
+                      ${conditions.map((condition) => `<option value="${condition}" ${formState.condition === condition ? "selected" : ""}>${condition}</option>`).join("")}
+                    </select>
+                  </label>
+                ` : `
+                  <label>
+                    Extra details
+                    <input id="description-input" value="${formState.description}" placeholder="Scratches, upgrades, fit notes..." />
+                  </label>
+                `}
+              </div>
+            </div>
+
+            ${isMotorcycle ? `
+              <div class="panel">
+                <h3>Motorcycle specifics</h3>
+                <div class="form-grid">
+                  <label>
+                    Owner count
+                    <select id="owner-count-select">
+                      <option value="">Select owners</option>
+                      ${ownerCounts.map((count) => `<option value="${count}" ${formState.owner_count === count ? "selected" : ""}>${count}</option>`).join("")}
+                    </select>
+                  </label>
+                  <label>
+                    Odometer (km)
+                    <input id="odo-input" type="number" min="0" value="${formState.odo}" placeholder="25000" />
+                  </label>
+                  <label>
+                    Manufacturing year
+                    <select id="mfg-select">
+                      <option value="">Select year</option>
+                      ${years.map((year) => `<option value="${year}" ${formState.mfg === year ? "selected" : ""}>${year}</option>`).join("")}
+                    </select>
+                  </label>
+                  <label>
+                    Registration year
+                    <select id="reg-select">
+                      <option value="">Select year</option>
+                      ${years.map((year) => `<option value="${year}" ${formState.reg === year ? "selected" : ""}>${year}</option>`).join("")}
+                    </select>
+                  </label>
+                </div>
+              </div>
+            ` : ""}
+
+            ${isAccessories ? `
+              <div class="panel">
+                <h3>Accessory / gadget specifics</h3>
+                <div class="form-grid">
+                  <label>
+                    Colour
+                    <input id="colour-input" value="${formState.colour}" placeholder="Black, red, silver..." />
+                  </label>
+                  <label>
+                    Used
+                    <select id="used-select">
+                      <option value="">Select</option>
+                      <option value="Yes" ${formState.used === "Yes" ? "selected" : ""}>Yes</option>
+                      <option value="No" ${formState.used === "No" ? "selected" : ""}>No</option>
+                    </select>
+                  </label>
+                </div>
+              </div>
+            ` : `
+              <div class="panel">
+                <h3>Description</h3>
+                <label>
+                  More details for buyers
+                  <textarea id="description-textarea" placeholder="Mention condition, alterations, fit notes, why it's useful, etc.">${formState.description}</textarea>
+                </label>
+              </div>
+            `}
+          </div>
+        `;
+      }
+
+      function renderPhotosStep() {
+        return `
+          <div class="step-header">
+            <div class="step-kicker">Photos</div>
+            <h2>Add up to two photos</h2>
+            <p>The reference flow keeps this lightweight. We are storing filenames in the listing payload for now.</p>
+          </div>
+          <div class="panel photo-row">
+            <label>
+              Select photos
+              <input id="photo-input" type="file" accept="image/*" multiple />
+            </label>
+            <div class="inline-help">Max 2 photos. Selected names will be included in the listing and WhatsApp message.</div>
+            <div class="photo-list">
+              ${formState.photos_names.length ? formState.photos_names.map((name, index) => `
+                <div class="photo-chip">
+                  <span>${name}</span>
+                  <button type="button" data-action="remove-photo" data-value="${index}">×</button>
+                </div>
+              `).join("") : '<span class="inline-help">No photos selected yet.</span>'}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderReasonStep() {
+        return `
+          <div class="step-header">
+            <div class="step-kicker">Reason For Sale</div>
+            <h2>Why are you selling it?</h2>
+            <p>This maps to the single description field in the flowchart before seller details.</p>
+          </div>
+          <div class="panel">
+            <label>
+              Reason for sale
+              <textarea id="reason-input" placeholder="Upgrading, not using anymore, moving cities, clearing garage space...">${formState.reason}</textarea>
+            </label>
+          </div>
+        `;
+      }
+
+      function renderSellerStep() {
+        return `
+          <div class="step-header">
+            <div class="step-kicker">Seller Details</div>
+            <h2>How should buyers contact you?</h2>
+            <p>The final step captures name, phone, contact preference, and listing consent.</p>
+          </div>
+          <div class="section">
+            <div class="panel">
+              <div class="form-grid">
+                <label>
+                  Name
+                  <input id="seller-name-input" value="${formState.seller_name}" placeholder="Full name" />
+                </label>
+                <label>
+                  Phone
+                  <input id="seller-phone-input" value="${formState.seller_phone}" placeholder="10-digit phone number" />
+                </label>
+              </div>
+            </div>
+            <div class="panel">
+              <h3>Contact preference</h3>
+              <div class="radio-stack">
+                ${callPreferences.map((option) => `
+                  <label class="radio-item">
+                    <input type="radio" name="callPreference" value="${option.id}" ${formState.call_preference === option.id ? "checked" : ""} />
+                    <span>${option.label}</span>
+                  </label>
+                `).join("")}
+              </div>
+            </div>
+            <div class="panel">
+              <div class="checkbox-stack">
+                <label class="checkbox-item">
+                  <input id="consent-input" type="checkbox" ${formState.location_consent ? "checked" : ""} />
+                  <span>I confirm that I own this item or am authorized to sell it, and I agree to have this listing posted in the Wheelsafar WhatsApp garage sale group.</span>
+                </label>
+                <div class="inline-help">Optional for now. Name and phone are the only mandatory fields on this screen.</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderActions() {
+        const step = currentStep();
+        const isFirst = step === "category";
+        const isLast = step === "seller";
+
+        return `
+          <div class="wizard-actions">
+            <button type="button" class="alt" ${isFirst ? "disabled" : ""} data-action="back">Back</button>
+            ${isLast
+              ? `<button type="button" class="gold" id="submit-listing" ${isStepValid(step) ? "" : "disabled"}>Submit Listing</button>`
+              : `<button type="button" class="gold" id="next-step" ${isStepValid(step) ? "" : "disabled"}>Continue</button>`}
+          </div>
+        `;
+      }
+
+      function updateProgress() {
+        const labels = {
+          category: "Category selection",
+          type: "Type selection",
+          size: "Size selection",
+          details: "Listing details",
+          photos: "Photos",
+          reason: "Reason for sale",
+          seller: "Seller details",
+        };
+        const steps = visibleSteps();
+        const index = Math.max(steps.indexOf(currentStep()), 0);
+        progressTitle.textContent = `Step ${index + 1} of ${steps.length}`;
+        progressMeta.textContent = labels[currentStep()];
+        progressFill.style.width = `${((index + 1) / steps.length) * 100}%`;
+      }
+
+      function renderWizard() {
+        updateProgress();
+        const step = currentStep();
+        let innerHtml = "";
+
+        if (step === "category") innerHtml = renderCategoryStep();
+        if (step === "type") innerHtml = renderTypeStep();
+        if (step === "size") innerHtml = renderSizeStep();
+        if (step === "details") innerHtml = renderDetailsStep();
+        if (step === "photos") innerHtml = renderPhotosStep();
+        if (step === "reason") innerHtml = renderReasonStep();
+        if (step === "seller") innerHtml = renderSellerStep();
+
+        wizardRoot.innerHTML = `${innerHtml}${renderActions()}`;
+        attachStepListeners();
+      }
+
+      function syncActionButtons() {
+        const nextButton = document.getElementById("next-step");
+        if (nextButton) {
+          nextButton.disabled = !isStepValid(currentStep());
+        }
+
+        const submitButton = document.getElementById("submit-listing");
+        if (submitButton) {
+          submitButton.disabled = !isStepValid(currentStep());
+        }
+      }
+
+      function attachStepListeners() {
+        wizardRoot.querySelectorAll("[data-action='choose-category']").forEach((button) => {
+          button.addEventListener("click", () => {
+            formState = { ...defaultState(), category: button.dataset.value, call_preference: "whatsapp", location_consent: false };
+            stepIndex = stepOrder.indexOf(nextStepId("category"));
+            renderWizard();
+          });
+        });
+
+        wizardRoot.querySelectorAll("[data-action='choose-type']").forEach((button) => {
+          button.addEventListener("click", () => {
+            formState.type = button.dataset.value;
+            formState.custom_type_title = "";
+            renderWizard();
+          });
+        });
+
+        wizardRoot.querySelectorAll("[data-action='choose-size']").forEach((button) => {
+          button.addEventListener("click", () => {
+            formState.size = button.dataset.value;
+            renderWizard();
+          });
+        });
+
+        wizardRoot.querySelectorAll("[data-action='choose-size-system']").forEach((button) => {
+          button.addEventListener("click", () => {
+            formState.size_system = button.dataset.value;
+            renderWizard();
+          });
+        });
+
+        wizardRoot.querySelectorAll("[data-action='remove-photo']").forEach((button) => {
+          button.addEventListener("click", () => {
+            formState.photos_names = formState.photos_names.filter((_, index) => index !== Number(button.dataset.value));
+            renderWizard();
+          });
+        });
+
+        const typeInput = document.getElementById("type-input");
+        if (typeInput) typeInput.addEventListener("input", (event) => { formState.type = event.target.value; syncActionButtons(); });
+
+        const customTypeInput = document.getElementById("custom-type-input");
+        if (customTypeInput) customTypeInput.addEventListener("input", (event) => { formState.custom_type_title = event.target.value; syncActionButtons(); });
+
+        const capacityInput = document.getElementById("capacity-input");
+        if (capacityInput) capacityInput.addEventListener("input", (event) => { formState.size = event.target.value; syncActionButtons(); });
+
+        [
+          ["brand-select", "brand"],
+          ["brand-input", "brand"],
+          ["model-input", "model"],
+          ["purchase-year-select", "purchase_year"],
+          ["location-input", "location"],
+          ["price-input", "price"],
+          ["price-type-select", "price_type"],
+          ["sale-timeline-select", "sale_timeline"],
+          ["condition-select", "condition"],
+          ["description-input", "description"],
+          ["description-textarea", "description"],
+          ["owner-count-select", "owner_count"],
+          ["odo-input", "odo"],
+          ["mfg-select", "mfg"],
+          ["reg-select", "reg"],
+          ["colour-input", "colour"],
+          ["used-select", "used"],
+          ["reason-input", "reason"],
+          ["seller-name-input", "seller_name"],
+          ["seller-phone-input", "seller_phone"],
+        ].forEach(([id, key]) => {
+          const element = document.getElementById(id);
+          if (!element) return;
+          element.addEventListener("input", (event) => { formState[key] = event.target.value; syncActionButtons(); });
+          element.addEventListener("change", (event) => { formState[key] = event.target.value; syncActionButtons(); });
+        });
+
+        document.querySelectorAll("input[name='callPreference']").forEach((radio) => {
+          radio.addEventListener("change", (event) => {
+            formState.call_preference = event.target.value;
+            syncActionButtons();
+          });
+        });
+
+        const consentInput = document.getElementById("consent-input");
+        if (consentInput) {
+          consentInput.addEventListener("change", (event) => {
+            formState.location_consent = event.target.checked;
+            syncActionButtons();
+          });
+        }
+
+        const photoInput = document.getElementById("photo-input");
+        if (photoInput) {
+          photoInput.addEventListener("change", (event) => {
+            const files = Array.from(event.target.files || []).slice(0, 2);
+            formState.photos_names = files.map((file) => file.name);
+            renderWizard();
+          });
+        }
+
+        const backButton = document.querySelector("[data-action='back']");
+        if (backButton) backButton.addEventListener("click", goBack);
+
+        const nextButton = document.getElementById("next-step");
+        if (nextButton) nextButton.addEventListener("click", () => { if (isStepValid(currentStep())) goNext(); });
+
+        const submitButton = document.getElementById("submit-listing");
+        if (submitButton) submitButton.addEventListener("click", submitListing);
+      }
+
       function formatApiError(detail) {
-        if (!detail) {
-          return "The backend could not save the event.";
-        }
-
-        if (typeof detail === "string") {
-          return detail;
-        }
-
+        if (!detail) return "The backend could not save the listing.";
+        if (typeof detail === "string") return detail;
         if (Array.isArray(detail)) {
-          return detail
-            .map((item) => {
-              const field = item.loc?.[item.loc.length - 1] || "field";
-              return `${field}: ${item.msg}`;
-            })
-            .join("\n");
+          return detail.map((item) => {
+            const field = item.loc?.[item.loc.length - 1] || "field";
+            return `${field}: ${item.msg}`;
+          }).join("\n");
         }
-
-        if (typeof detail === "object") {
-          return JSON.stringify(detail, null, 2);
-        }
-
-        return "The backend could not save the event.";
+        return JSON.stringify(detail, null, 2);
       }
 
-      function renderEvents(items) {
-        if (!items.length) {
-          eventList.innerHTML = '<p class="empty">No events submitted yet.</p>';
-          return;
-        }
+      async function submitListing() {
+        setStatus("warning", "Saving the listing and attempting WhatsApp forwarding...");
 
-        eventList.innerHTML = items
-          .map((event) => {
-            const statusClass = (event.forward_status || "skipped").toLowerCase();
-            return `
-              <article class="event-item">
-                <h3>${event.title}</h3>
-                <p class="event-meta">
-                  ${event.organizer_name} • ${event.phone_number}<br />
-                  ${event.event_date} • ${event.location}<br />
-                  Saved at ${new Date(event.created_at).toLocaleString()}
-                </p>
-                <p class="event-body">${event.description}</p>
-                <span class="pill ${statusClass}">${event.forward_status}</span>
-              </article>
-            `;
-          })
-          .join("");
-      }
-
-      async function loadEvents() {
-        const response = await fetch("/api/events");
-        const payload = await response.json();
-        renderEvents(payload.items || []);
-      }
-
-      form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        submitButton.disabled = true;
-        setStatus("warning", "Saving the event and attempting WhatsApp forwarding...");
-
-        const formData = new FormData(form);
-        const payload = Object.fromEntries(formData.entries());
+        const payload = {
+          ...formState,
+          type: typeLabel(),
+        };
 
         try {
-          const response = await fetch("/api/events", {
+          const response = await fetch("/api/listings", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
           });
-
           const result = await response.json();
           if (!response.ok && response.status !== 202) {
             throw new Error(formatApiError(result.detail));
           }
 
-          const eventData = result.event;
-          const detail = eventData.forward_response?.detail || "Forwarding response received.";
-          const kind = eventData.forward_status === "failed" ? "error" : "success";
-
+          const listing = result.listing;
+          const detail = listing.forward_response?.detail || "Forwarding response received.";
+          const kind = listing.forward_status === "failed" ? "error" : "success";
           setStatus(
             kind,
-            `Saved event #${eventData.id}.\nForward status: ${eventData.forward_status}.\nTarget: ${eventData.forward_target}.\n${detail}`
+            `Saved listing #${listing.id}.\nForward status: ${listing.forward_status}.\nTarget: ${listing.forward_target}.\n${detail}`
           );
 
-          form.reset();
-          await loadEvents();
+          formState = defaultState();
+          stepIndex = 0;
+          renderWizard();
+          await loadListings();
         } catch (error) {
-          setStatus("error", error.message || "Something went wrong while submitting the event.");
-        } finally {
-          submitButton.disabled = false;
+          setStatus("error", error.message || "Something went wrong while submitting the listing.");
         }
-      });
+      }
 
-      loadEvents().catch(() => {
-        setStatus("error", "The page loaded, but the backend event list could not be fetched.");
+      function renderListings(items) {
+        if (!items.length) {
+          listingList.innerHTML = '<p class="empty">No listings submitted yet.</p>';
+          return;
+        }
+
+        listingList.innerHTML = items.map((listing) => `
+          <article class="listing-item">
+            <h3>${listingTitle(listing)}</h3>
+            <p class="listing-meta">
+              ${listing.category} • INR ${listing.price}<br />
+              ${(listing.details.custom_type_title || listing.details.type || "General")}${listing.details.size ? ` • ${listing.details.size_system ? `${listing.details.size_system} ` : ""}${listing.details.size}` : ""}<br />
+              ${listing.location} • ${listing.seller_name}<br />
+              Saved at ${new Date(listing.created_at).toLocaleString()}
+            </p>
+            <p class="listing-body">${listing.details.reason || listing.details.description || "No extra description provided."}</p>
+            <span class="pill ${listing.forward_status}">${listing.forward_status}</span>
+          </article>
+        `).join("");
+      }
+
+      async function loadListings() {
+        const response = await fetch("/api/listings");
+        const payload = await response.json();
+        renderListings(payload.items || []);
+      }
+
+      renderWizard();
+      loadListings().catch(() => {
+        setStatus("error", "The page loaded, but recent listings could not be fetched.");
       });
     </script>
   </body>
