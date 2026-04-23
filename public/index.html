@@ -6,18 +6,48 @@
     <title>Wheelsafar Garage Sale</title>
     <style>
       :root {
-        color-scheme: light;
-        --bg: #f8f0e3;
-        --paper: rgba(255, 251, 245, 0.94);
-        --panel: #fffaf2;
-        --ink: #1f1a16;
-        --muted: #73655a;
+        color-scheme: dark;
+        --bg: #050505;
+        --paper: #202020;
+        --panel: #151515;
+        --panel-strong: #282828;
+        --ink: #f2f2f2;
+        --muted: #c7c7c7;
+        --quiet: #7c7c7c;
         --accent: #ffcc05;
-        --accent-deep: #f49b10;
-        --line: rgba(89, 64, 45, 0.14);
-        --success: #21673d;
-        --warning: #9a5d07;
-        --danger: #a12828;
+        --accent-deep: #ffd700;
+        --line: #4c4c4c;
+        --success: #0fb741;
+        --warning: #ffcc05;
+        --danger: #ee6262;
+      }
+
+      @font-face {
+        font-family: "Lexend";
+        font-weight: 400;
+        font-display: swap;
+        src: url("/fonts/Lexend-Regular.ttf") format("truetype");
+      }
+
+      @font-face {
+        font-family: "Lexend";
+        font-weight: 500;
+        font-display: swap;
+        src: url("/fonts/Lexend-Medium.ttf") format("truetype");
+      }
+
+      @font-face {
+        font-family: "Lexend";
+        font-weight: 600;
+        font-display: swap;
+        src: url("/fonts/Lexend-SemiBold.ttf") format("truetype");
+      }
+
+      @font-face {
+        font-family: "Lexend";
+        font-weight: 700;
+        font-display: swap;
+        src: url("/fonts/Lexend-Bold.ttf") format("truetype");
       }
 
       * {
@@ -28,11 +58,9 @@
         margin: 0;
         min-height: 100vh;
         font-family: "Lexend", "Segoe UI", sans-serif;
+        letter-spacing: 0.2px;
         color: var(--ink);
-        background:
-          radial-gradient(circle at top left, rgba(255, 220, 173, 0.8), transparent 30%),
-          radial-gradient(circle at bottom right, rgba(255, 204, 5, 0.2), transparent 25%),
-          linear-gradient(140deg, #f9f3eb 0%, #efe3d1 100%);
+        background: radial-gradient(ellipse 120% 80% at 50% 8%, rgba(23, 22, 22, 0.92) 0%, #050505 62%, #000 100%);
       }
 
       .shell {
@@ -47,13 +75,25 @@
         margin-bottom: 24px;
       }
 
+      .brand-row {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .brand-row img {
+        height: 24px;
+        width: auto;
+      }
+
       .eyebrow {
         width: fit-content;
         padding: 8px 12px;
         border-radius: 999px;
-        background: rgba(255, 204, 5, 0.24);
-        color: #6d4d00;
-        font-size: 0.78rem;
+        background: rgba(255, 204, 5, 0.12);
+        color: var(--accent);
+        border: 1.2px solid rgba(255, 204, 5, 0.32);
+        font-size: 0.74rem;
         font-weight: 700;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -61,9 +101,10 @@
 
       h1 {
         margin: 0;
-        font-size: clamp(2.3rem, 5vw, 4.8rem);
-        line-height: 0.95;
-        letter-spacing: -0.05em;
+        max-width: 920px;
+        font-size: clamp(2.2rem, 5vw, 4.1rem);
+        line-height: 1.02;
+        letter-spacing: -0.5px;
       }
 
       .lede {
@@ -81,10 +122,10 @@
       }
 
       .card {
-        border: 1px solid var(--line);
-        border-radius: 28px;
+        border: 1.2px solid var(--line);
+        border-radius: 24px;
         background: var(--paper);
-        box-shadow: 0 22px 50px rgba(78, 54, 38, 0.08);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
       }
 
       .wizard-card {
@@ -93,7 +134,7 @@
 
       .progress-shell {
         padding: 24px 26px 18px;
-        background: linear-gradient(135deg, #ffcc05 0%, #ffd95d 100%);
+        background: var(--accent);
       }
 
       .progress-row {
@@ -106,19 +147,19 @@
       .progress-title {
         font-size: 0.92rem;
         font-weight: 700;
-        color: #563c00;
+        color: #000;
       }
 
       .progress-meta {
         font-size: 0.88rem;
-        color: rgba(31, 26, 22, 0.75);
+        color: rgba(0, 0, 0, 0.72);
       }
 
       .progress-bar {
         margin-top: 14px;
         height: 9px;
         border-radius: 999px;
-        background: rgba(31, 26, 22, 0.14);
+        background: rgba(0, 0, 0, 0.14);
         overflow: hidden;
       }
 
@@ -126,7 +167,7 @@
         height: 100%;
         width: 14%;
         border-radius: 999px;
-        background: #1f1a16;
+        background: #000;
         transition: width 0.25s ease;
       }
 
@@ -145,7 +186,7 @@
         font-weight: 700;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: #9c7118;
+        color: var(--accent);
       }
 
       .step-header h2 {
@@ -168,9 +209,9 @@
       .choice-card,
       .pill-option {
         border: 1px solid var(--line);
-        border-radius: 22px;
-        background: #fffdf8;
-        color: #4f3a27;
+        border-radius: 20px;
+        background: var(--panel);
+        color: var(--ink);
         cursor: pointer;
         transition: 0.22s ease;
       }
@@ -186,33 +227,46 @@
       .pill-option.active {
         transform: translateY(-2px);
         border-color: rgba(244, 155, 16, 0.65);
-        box-shadow: 0 14px 24px rgba(255, 204, 5, 0.16);
-        background: #fff1ae;
+        box-shadow: 0 6px 24px rgba(255, 204, 5, 0.22);
+        background: rgba(255, 204, 5, 0.12);
       }
 
       .pill-option {
-        border: 1.5px solid rgba(120, 88, 43, 0.28);
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+        border: 1.2px solid var(--line);
       }
 
       .pill-option:not(.active) {
-        background: #fffaf2;
-        color: #684d2f;
+        background: var(--panel);
+        color: var(--muted);
       }
 
       .pill-option:hover:not(.active) {
-        background: #fff4d1;
-        color: #3f2d16;
+        background: var(--panel-strong);
+        color: var(--ink);
       }
 
       .pill-option.active {
-        border-color: rgba(214, 155, 16, 0.8);
-        color: #4b3200;
-        background: linear-gradient(135deg, #ffe382 0%, #ffd046 100%);
+        border-color: var(--accent);
+        color: #000;
+        background: var(--accent);
       }
 
       .choice-icon {
-        font-size: 2rem;
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 12px;
+        object-fit: contain;
+        display: block;
+      }
+
+      .choice-icon.placeholder {
+        display: grid;
+        place-items: center;
+        border-radius: 14px;
+        background: rgba(255, 204, 5, 0.14);
+        color: var(--accent);
+        font-weight: 700;
+        font-size: 1rem;
         margin-bottom: 12px;
       }
 
@@ -249,22 +303,22 @@
         gap: 8px;
         padding: 10px 12px;
         border-radius: 999px;
-        border: 1px solid rgba(214, 155, 16, 0.32);
-        background: #fff2bf;
-        color: #5a4000;
+        border: 1.2px solid rgba(255, 204, 5, 0.35);
+        background: rgba(255, 204, 5, 0.12);
+        color: var(--muted);
         font-size: 0.88rem;
         font-weight: 600;
       }
 
       .summary-pill strong {
-        color: #2f2415;
+        color: var(--accent);
       }
 
       .panel {
         padding: 22px;
         border-radius: 22px;
         border: 1px solid var(--line);
-        background: rgba(255, 255, 255, 0.56);
+        background: var(--panel);
       }
 
       .panel h3 {
@@ -295,10 +349,15 @@
         width: 100%;
         border: 1px solid rgba(73, 52, 37, 0.2);
         border-radius: 16px;
-        background: #fffef9;
+        background: var(--panel);
         padding: 13px 14px;
         font: inherit;
         color: inherit;
+      }
+
+      select option {
+        color: #f2f2f2;
+        background: #151515;
       }
 
       textarea {
@@ -310,7 +369,7 @@
       select:focus,
       textarea:focus {
         outline: 2px solid rgba(255, 204, 5, 0.28);
-        border-color: #d69b10;
+        border-color: var(--accent);
       }
 
       .inline-help {
@@ -332,7 +391,7 @@
         padding: 12px 14px;
         border-radius: 16px;
         border: 1px solid var(--line);
-        background: #fffef9;
+        background: var(--panel);
         font-weight: 500;
       }
 
@@ -359,8 +418,8 @@
         gap: 8px;
         padding: 10px 12px;
         border-radius: 999px;
-        background: #fff0b7;
-        border: 1px solid rgba(214, 155, 16, 0.3);
+        background: rgba(255, 204, 5, 0.12);
+        border: 1.2px solid rgba(255, 204, 5, 0.32);
         font-size: 0.86rem;
       }
 
@@ -382,8 +441,8 @@
         appearance: none;
         border: 0;
         border-radius: 999px;
-        background: #1f1a16;
-        color: #fff8ef;
+        background: var(--accent);
+        color: #000;
         padding: 14px 22px;
         font: inherit;
         font-weight: 700;
@@ -391,12 +450,14 @@
       }
 
       button.alt {
-        background: rgba(31, 26, 22, 0.08);
-        color: #1f1a16;
+        background: transparent;
+        color: var(--ink);
+        border: 1.2px solid var(--line);
       }
 
       button.gold {
-        background: var(--accent-deep);
+        background: var(--accent);
+        color: #000;
       }
 
       button:disabled {
@@ -417,7 +478,7 @@
       .status-box {
         border-radius: 18px;
         padding: 16px;
-        background: rgba(255, 255, 255, 0.64);
+        background: var(--panel);
         border: 1px solid var(--line);
         line-height: 1.55;
         white-space: pre-line;
@@ -444,7 +505,7 @@
         padding: 16px;
         border-radius: 20px;
         border: 1px solid var(--line);
-        background: rgba(255, 255, 255, 0.58);
+        background: var(--panel);
       }
 
       .listing-item h3 {
@@ -503,7 +564,10 @@
   <body>
     <main class="shell">
       <section class="hero">
-        <div class="eyebrow">Wheelsafar Garage Sale</div>
+        <div class="brand-row">
+          <img src="/assets/yellow_wheelsafar_logo.svg" alt="Wheelsafar" />
+          <div class="eyebrow">Garage Sale</div>
+        </div>
         <h1>Build a category-aware listing, save it, then push it to the WhatsApp group.</h1>
         <p class="lede">
           This wizard follows the Miro flow: category decides the next questions, some categories skip steps, and the final listing is stored in the backend before being forwarded to the community group.
@@ -544,31 +608,31 @@
 
     <script>
       const categories = [
-        { id: "motorcycle", label: "Motorcycle", icon: "🏍️" },
-        { id: "riding-gears", label: "Riding Gears", icon: "🧥" },
-        { id: "luggage", label: "Luggage", icon: "🎒" },
-        { id: "accessories", label: "Accessories & Spare Parts", icon: "🔧" },
-        { id: "technology", label: "Technology & Gadgets", icon: "📱" },
+        { id: "motorcycle", label: "Motorcycle", icon: "/assets/home-bike.svg" },
+        { id: "riding-gears", label: "Riding Gears", icon: "/assets/home-jacket.svg" },
+        { id: "luggage", label: "Luggage", icon: "/assets/home-accessory.svg" },
+        { id: "accessories", label: "Accessories & Spare Parts", icon: "/assets/home-accessory.svg" },
+        { id: "technology", label: "Technology & Gadgets", icon: "/assets/home-intercom.svg" },
       ];
 
       const typesByCategory = {
         motorcycle: [],
         "riding-gears": [
-          { id: "boots", label: "Boots", icon: "🥾" },
-          { id: "helmet", label: "Helmet", icon: "🪖" },
-          { id: "jacket", label: "Jacket", icon: "🧥" },
-          { id: "pant", label: "Pant", icon: "👖" },
-          { id: "gloves", label: "Gloves", icon: "🧤" },
+          { id: "boots", label: "Boots", icon: "/assets/home-boots.svg" },
+          { id: "helmet", label: "Helmet", icon: "/assets/home-helmet.svg" },
+          { id: "jacket", label: "Jacket", icon: "/assets/home-jacket.svg" },
+          { id: "pant", label: "Pant", icon: "/assets/home-pant.svg" },
+          { id: "gloves", label: "Gloves", icon: "/assets/home-gloves.svg" },
         ],
         luggage: [
-          { id: "tank-bag", label: "Tank Bag", icon: "🧳" },
-          { id: "tail-bag", label: "Tail Bag", icon: "🎒" },
-          { id: "saddle-bags", label: "Saddle Bags", icon: "👜" },
-          { id: "crash-bar-bags", label: "Crash Bar Bags", icon: "🧰" },
-          { id: "topbox", label: "Topbox", icon: "📦" },
-          { id: "panniers", label: "Panniers", icon: "🧳" },
-          { id: "backpack", label: "Backpack / Hydration Bag", icon: "🎒" },
-          { id: "other", label: "Other", icon: "➕" },
+          { id: "tank-bag", label: "Tank Bag", icon: "/assets/home-accessory.svg" },
+          { id: "tail-bag", label: "Tail Bag", icon: "/assets/home-accessory.svg" },
+          { id: "saddle-bags", label: "Saddle Bags", icon: "/assets/home-accessory.svg" },
+          { id: "crash-bar-bags", label: "Crash Bar Bags", icon: "/assets/home-accessory.svg" },
+          { id: "topbox", label: "Topbox", icon: "/assets/home-accessory.svg" },
+          { id: "panniers", label: "Panniers", icon: "/assets/home-accessory.svg" },
+          { id: "backpack", label: "Backpack / Hydration Bag", icon: "/assets/home-accessory.svg" },
+          { id: "other", label: "Other", icon: "/assets/wheelsafar_icon.svg" },
         ],
       };
 
@@ -755,7 +819,9 @@
           <div class="choice-grid">
             ${items.map((item) => `
               <button type="button" class="choice-card ${selectedValue === item.id ? "active" : ""}" data-action="${onSelect}" data-value="${item.id}">
-                <div class="choice-icon">${item.icon || "•"}</div>
+                ${item.icon
+                  ? `<img class="choice-icon" src="${item.icon}" alt="${item.label}" />`
+                  : `<div class="choice-icon placeholder">${item.label.slice(0, 1)}</div>`}
                 <div class="choice-label">${item.label}</div>
               </button>
             `).join("")}
