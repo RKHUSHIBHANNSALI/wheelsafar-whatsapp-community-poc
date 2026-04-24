@@ -1,0 +1,154 @@
+/* Wheelsafar Design System — Colors & Type
+   Source of truth: wheelsafar/lib/core/constants/colors.dart + typography.dart
+*/
+
+@font-face { font-family: 'Lexend'; font-weight: 100; font-style: normal; font-display: swap; src: url('/fonts/Lexend-Thin.ttf') format('truetype'); }
+@font-face { font-family: 'Lexend'; font-weight: 200; font-style: normal; font-display: swap; src: url('/fonts/Lexend-ExtraLight.ttf') format('truetype'); }
+@font-face { font-family: 'Lexend'; font-weight: 300; font-style: normal; font-display: swap; src: url('/fonts/Lexend-Light.ttf') format('truetype'); }
+@font-face { font-family: 'Lexend'; font-weight: 400; font-style: normal; font-display: swap; src: url('/fonts/Lexend-Regular.ttf') format('truetype'); }
+@font-face { font-family: 'Lexend'; font-weight: 500; font-style: normal; font-display: swap; src: url('/fonts/Lexend-Medium.ttf') format('truetype'); }
+@font-face { font-family: 'Lexend'; font-weight: 600; font-style: normal; font-display: swap; src: url('/fonts/Lexend-SemiBold.ttf') format('truetype'); }
+@font-face { font-family: 'Lexend'; font-weight: 700; font-style: normal; font-display: swap; src: url('/fonts/Lexend-Bold.ttf') format('truetype'); }
+@font-face { font-family: 'Lexend'; font-weight: 800; font-style: normal; font-display: swap; src: url('/fonts/Lexend-ExtraBold.ttf') format('truetype'); }
+@font-face { font-family: 'Lexend'; font-weight: 900; font-style: normal; font-display: swap; src: url('/fonts/Lexend-Black.ttf') format('truetype'); }
+
+:root {
+  /* ========== BRAND ========== */
+  --ws-yellow: #FFCC05;          /* primary / highlight */
+  --ws-yellow-deep: #FFD700;     /* used in onboarding wordmark */
+  --ws-black: #000000;
+  --ws-pure-dark: #1A1A1A;       /* splash / shell */
+  --ws-app-bg: #050505;          /* feed background */
+
+  /* ========== NEUTRALS ========== */
+  --ws-surface: #202020;         /* cards */
+  --ws-surface-2: #151515;       /* search pill, deeper */
+  --ws-surface-3: #282828;       /* auth card (with 70% alpha use in real app) */
+  --ws-surface-dark: #353535;    /* elevated surface */
+  --ws-tertiary-light: #404040;  /* hover / divider strong */
+  --ws-border: #4C4C4C;          /* default 1.2px border */
+  --ws-border-soft: #616161;
+  --ws-gray-800: #2F2F2F;
+  --ws-gray-700: #4E4E55;
+  --ws-gray-500: #4E4E4E;
+  --ws-gray-100: #535353;
+
+  /* ========== TEXT ========== */
+  --ws-text-primary: #FFCC05;    /* yellow highlighted text */
+  --ws-text-on-dark: #FFFFFF;
+  --ws-text-secondary: #F2F2F2;  /* default body */
+  --ws-text-tertiary: #C7C7C7;   /* muted body / input labels */
+  --ws-text-muted: #7C7C7C;
+  --ws-text-disabled: #3C3C3C;
+  --ws-text-placeholder: #CDCDCD;
+
+  /* ========== SEMANTIC ========== */
+  --ws-success: #0FB741;
+  --ws-success-alt: #2CB856;
+  --ws-success-snack: rgba(91, 208, 49, 0.30);
+  --ws-success-border: #0E4C0D;
+  --ws-error: #EE6262;
+  --ws-error-legacy: #FF6551;
+  --ws-error-snack: rgba(255, 107, 107, 0.40);
+  --ws-error-border: #8B0000;
+  --ws-info: #C7C7C7;
+  --ws-info-snack: #414141;
+  --ws-star: #FFA500;
+
+  /* ========== ON-TOKEN ========== */
+  --ws-on-primary: #000000;      /* black text on yellow button */
+  --ws-on-surface: #FFFFFF;
+
+  /* ========== RADIUS ========== */
+  --ws-radius-xs: 5px;
+  --ws-radius-sm: 8px;
+  --ws-radius-md: 10px;
+  --ws-radius-lg: 20px;
+  --ws-radius-xl: 24px;
+  --ws-radius-2xl: 28px;
+  --ws-radius-pill: 9999px;
+
+  /* ========== SHADOWS / DEPTH ========== */
+  --ws-shadow-card: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --ws-shadow-sheet: 0 -8px 24px rgba(0, 0, 0, 0.55);
+  --ws-shadow-yellow: 0 6px 24px rgba(255, 204, 5, 0.25);
+
+  /* ========== SPACING ========== */
+  --ws-space-1: 4px;
+  --ws-space-2: 8px;
+  --ws-space-3: 12px;
+  --ws-space-4: 16px;
+  --ws-space-5: 20px;
+  --ws-space-6: 24px;
+  --ws-space-8: 32px;
+  --ws-space-10: 40px;
+
+  /* ========== TYPOGRAPHY ========== */
+  --ws-font: 'Lexend', system-ui, -apple-system, sans-serif;
+  --ws-font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Display / headline */
+  --ws-display1-size: 16px;  --ws-display1-weight: 700; /* "Wheelsafar" wordmark small */
+  --ws-display2-size: 24px;  --ws-display2-weight: 600;
+
+  --ws-h1-size: 22px;        --ws-h1-weight: 600;
+  --ws-h1-alt-size: 20px;    --ws-h1-alt-weight: 500;
+  --ws-h2-size: 18px;        --ws-h2-weight: 500;
+
+  --ws-body1-size: 16px;     --ws-body1-weight: 400;
+  --ws-body2-size: 14px;     --ws-body2-weight: 400;
+
+  --ws-caption1-size: 12px;  --ws-caption1-weight: 400;
+  --ws-caption1_1-size: 15px;--ws-caption1_1-weight: 400;
+  --ws-caption2-size: 10px;  --ws-caption2-weight: 300;
+
+  --ws-letter-spacing: 0.2px;
+  --ws-letter-spacing-tight: 0.1px;
+  --ws-letter-spacing-brand: -0.5px;  /* used on hero wordmark */
+}
+
+/* ========== Global type resets ========== */
+.ws, .ws * { font-family: var(--ws-font); }
+
+.ws-display1 { font: var(--ws-display1-weight) var(--ws-display1-size)/1.25 var(--ws-font); letter-spacing: var(--ws-letter-spacing); color: var(--ws-text-secondary); }
+.ws-display2 { font: var(--ws-display2-weight) var(--ws-display2-size)/1.25 var(--ws-font); letter-spacing: var(--ws-letter-spacing); color: var(--ws-text-secondary); }
+.ws-h1      { font: var(--ws-h1-weight) var(--ws-h1-size)/1.3 var(--ws-font); letter-spacing: var(--ws-letter-spacing); color: var(--ws-text-secondary); }
+.ws-h1-alt  { font: var(--ws-h1-alt-weight) var(--ws-h1-alt-size)/1.3 var(--ws-font); letter-spacing: var(--ws-letter-spacing); color: var(--ws-text-secondary); }
+.ws-h2      { font: var(--ws-h2-weight) var(--ws-h2-size)/1.35 var(--ws-font); letter-spacing: var(--ws-letter-spacing); color: var(--ws-text-secondary); }
+.ws-body1   { font: var(--ws-body1-weight) var(--ws-body1-size)/1.5 var(--ws-font); letter-spacing: var(--ws-letter-spacing); color: var(--ws-text-secondary); }
+.ws-body2   { font: var(--ws-body2-weight) var(--ws-body2-size)/1.5 var(--ws-font); letter-spacing: var(--ws-letter-spacing); color: var(--ws-text-secondary); }
+.ws-caption1{ font: var(--ws-caption1-weight) var(--ws-caption1-size)/1.45 var(--ws-font); letter-spacing: var(--ws-letter-spacing-tight); color: var(--ws-text-tertiary); }
+.ws-caption2{ font: var(--ws-caption2-weight) var(--ws-caption2-size)/1.45 var(--ws-font); letter-spacing: var(--ws-letter-spacing-tight); color: var(--ws-text-tertiary); }
+
+.ws-brand   { font: 700 30px/1 var(--ws-font); letter-spacing: -0.5px; color: var(--ws-yellow); }
+
+/* ========== Primitives ========== */
+.ws-card {
+  background: var(--ws-surface);
+  border-radius: var(--ws-radius-lg);
+  border: 1px solid transparent;
+}
+.ws-card-outlined {
+  background: var(--ws-surface-2);
+  border: 1.2px solid var(--ws-border);
+  border-radius: var(--ws-radius-xl);
+}
+.ws-btn-primary {
+  background: var(--ws-yellow);
+  color: var(--ws-on-primary);
+  font: 600 16px/1 var(--ws-font);
+  padding: 14px 20px;
+  border-radius: var(--ws-radius-pill);
+  border: none;
+  cursor: pointer;
+}
+.ws-btn-primary:active { transform: scale(0.98); }
+.ws-btn-secondary {
+  background: transparent;
+  color: var(--ws-text-secondary);
+  border: 1.2px solid var(--ws-border);
+  font: 500 16px/1 var(--ws-font);
+  padding: 14px 20px;
+  border-radius: var(--ws-radius-pill);
+  cursor: pointer;
+}

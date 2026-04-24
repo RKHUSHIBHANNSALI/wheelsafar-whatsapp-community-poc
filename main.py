@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import sqlite3
 from contextlib import closing
 from datetime import datetime, timezone
@@ -17,11 +18,20 @@ from pydantic import BaseModel, Field
 BASE_DIR = Path(__file__).resolve().parent
 PUBLIC_DIR = BASE_DIR / "public"
 DATABASE_PATH = Path(os.getenv("EVENTS_DB_PATH", BASE_DIR / "events.db"))
+DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
+LISTINGS_TABLE = os.getenv("LISTINGS_TABLE", "poc_whatsapp_listings").strip()
 WHATSAPP_FORWARD_MODE = os.getenv("WHATSAPP_FORWARD_MODE", "mock").lower()
 WHATSAPP_SENDER_URL = os.getenv("WHATSAPP_SENDER_URL", "http://127.0.0.1:3001/send")
 WHATSAPP_TARGET_CHAT_ID = os.getenv("WHATSAPP_TARGET_CHAT_ID", "community-announcements@g.us")
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "").strip()
 
 app = FastAPI(title="Wheelsafar Garage Sale POC")
+
+if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", LISTINGS_TABLE):
+    raise RuntimeError(
+        "Invalid LISTINGS_TABLE. Use letters/numbers/underscores only, "
+        "and do not start with a number."
+    )
 
 
 class ListingSubmission(BaseModel):
@@ -54,7 +64,25 @@ class ListingSubmission(BaseModel):
     call_preference: str = Field(default="", max_length=20)
 
 
-def get_db_connection() -> sqlite3.Connection:
+class GoogleAuthRequest(BaseModel):
+    id_token: str = Field(min_length=10)
+
+
+def is_postgres() -> bool:
+    return DATABASE_URL.startswith("postgresql://") or DATABASE_URL.startswith("postgres://")
+
+
+def get_db_connection() -> Any:
+    if is_postgres():
+        try:
+            import psycopg2
+        except ImportError as exc:
+            raise RuntimeError(
+                "DATABASE_URL is set to PostgreSQL, but psycopg2 is not installed. "
+                "Install requirements again."
+            ) from exc
+        return psycopg2.connect(DATABASE_URL)
+
     connection = sqlite3.connect(DATABASE_PATH)
     connection.row_factory = sqlite3.Row
     return connection
@@ -62,9 +90,32 @@ def get_db_connection() -> sqlite3.Connection:
 
 def init_db() -> None:
     with closing(get_db_connection()) as connection:
+        if is_postgres():
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    f"""
+                    CREATE TABLE IF NOT EXISTS {LISTINGS_TABLE} (
+                        id BIGSERIAL PRIMARY KEY,
+                        listing_title TEXT NOT NULL,
+                        category TEXT NOT NULL,
+                        seller_name TEXT NOT NULL,
+                        seller_phone TEXT NOT NULL,
+                        price TEXT NOT NULL,
+                        location TEXT NOT NULL,
+                        details_json TEXT NOT NULL,
+                        created_at TEXT NOT NULL,
+                        forward_status TEXT NOT NULL,
+                        forward_target TEXT NOT NULL,
+                        forward_response TEXT
+                    )
+                    """
+                )
+            connection.commit()
+            return
+
         connection.execute(
-            """
-            CREATE TABLE IF NOT EXISTS listings (
+            f"""
+            CREATE TABLE IF NOT EXISTS {LISTINGS_TABLE} (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 listing_title TEXT NOT NULL,
                 category TEXT NOT NULL,
@@ -200,6 +251,35 @@ def forward_listing_to_whatsapp(payload: ListingSubmission) -> dict[str, Any]:
         }
 
 
+def verify_google_id_token(id_token_str: str) -> dict[str, Any]:
+    if not GOOGLE_CLIENT_ID:
+        raise HTTPException(status_code=503, detail="Google SSO is not configured on this backend.")
+
+    try:
+        from google.auth.transport import requests as google_requests
+        from google.oauth2 import id_token as google_id_token
+    except ImportError as exc:
+        raise HTTPException(
+            status_code=500,
+            detail="Google auth dependency missing on server. Install requirements.",
+        ) from exc
+
+    try:
+        token_info = google_id_token.verify_oauth2_token(
+            id_token_str,
+            google_requests.Request(),
+            GOOGLE_CLIENT_ID,
+        )
+        return token_info
+    except ValueError as exc:
+        raise HTTPException(status_code=401, detail=f"Invalid Google ID token: {exc}") from exc
+    except Exception as exc:
+        raise HTTPException(
+            status_code=502,
+            detail=f"Google token verification failed due to upstream/network issue: {exc}",
+        ) from exc
+
+
 def insert_listing(payload: ListingSubmission, forward_result: dict[str, Any]) -> dict[str, Any]:
     created_at = datetime.now(timezone.utc).isoformat()
     details_json = payload.model_dump_json()
@@ -207,38 +287,64 @@ def insert_listing(payload: ListingSubmission, forward_result: dict[str, Any]) -
     listing_title = build_listing_title(payload)
 
     with closing(get_db_connection()) as connection:
-        cursor = connection.execute(
-            """
-            INSERT INTO listings (
-                listing_title,
-                category,
-                seller_name,
-                seller_phone,
-                price,
-                location,
-                details_json,
-                created_at,
-                forward_status,
-                forward_target,
-                forward_response
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """,
-            (
-                listing_title,
-                payload.category,
-                payload.seller_name,
-                payload.seller_phone,
-                payload.price or "",
-                payload.location or "",
-                details_json,
-                created_at,
-                forward_result["status"],
-                forward_result["target"],
-                response_json,
-            ),
+        insert_values = (
+            listing_title,
+            payload.category,
+            payload.seller_name,
+            payload.seller_phone,
+            payload.price or "",
+            payload.location or "",
+            details_json,
+            created_at,
+            forward_result["status"],
+            forward_result["target"],
+            response_json,
         )
-        connection.commit()
-        listing_id = cursor.lastrowid
+
+        if is_postgres():
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    f"""
+                    INSERT INTO {LISTINGS_TABLE} (
+                        listing_title,
+                        category,
+                        seller_name,
+                        seller_phone,
+                        price,
+                        location,
+                        details_json,
+                        created_at,
+                        forward_status,
+                        forward_target,
+                        forward_response
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    RETURNING id
+                    """,
+                    insert_values,
+                )
+                listing_id = cursor.fetchone()[0]
+            connection.commit()
+        else:
+            cursor = connection.execute(
+                f"""
+                INSERT INTO {LISTINGS_TABLE} (
+                    listing_title,
+                    category,
+                    seller_name,
+                    seller_phone,
+                    price,
+                    location,
+                    details_json,
+                    created_at,
+                    forward_status,
+                    forward_target,
+                    forward_response
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                insert_values,
+            )
+            connection.commit()
+            listing_id = cursor.lastrowid
 
     return {
         "id": listing_id,
@@ -253,27 +359,53 @@ def insert_listing(payload: ListingSubmission, forward_result: dict[str, Any]) -
 
 def fetch_recent_listings(limit: int = 20) -> list[dict[str, Any]]:
     with closing(get_db_connection()) as connection:
-        rows = connection.execute(
-            """
-            SELECT
-                id,
-                listing_title,
-                category,
-                seller_name,
-                seller_phone,
-                price,
-                location,
-                details_json,
-                created_at,
-                forward_status,
-                forward_target,
-                forward_response
-            FROM listings
-            ORDER BY id DESC
-            LIMIT ?
-            """,
-            (limit,),
-        ).fetchall()
+        if is_postgres():
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    f"""
+                    SELECT
+                        id,
+                        listing_title,
+                        category,
+                        seller_name,
+                        seller_phone,
+                        price,
+                        location,
+                        details_json,
+                        created_at,
+                        forward_status,
+                        forward_target,
+                        forward_response
+                    FROM {LISTINGS_TABLE}
+                    ORDER BY id DESC
+                    LIMIT %s
+                    """,
+                    (limit,),
+                )
+                columns = [description[0] for description in cursor.description]
+                rows = [dict(zip(columns, row, strict=False)) for row in cursor.fetchall()]
+        else:
+            rows = connection.execute(
+                f"""
+                SELECT
+                    id,
+                    listing_title,
+                    category,
+                    seller_name,
+                    seller_phone,
+                    price,
+                    location,
+                    details_json,
+                    created_at,
+                    forward_status,
+                    forward_target,
+                    forward_response
+                FROM {LISTINGS_TABLE}
+                ORDER BY id DESC
+                LIMIT ?
+                """,
+                (limit,),
+            ).fetchall()
 
     listings: list[dict[str, Any]] = []
     for row in rows:
@@ -302,12 +434,39 @@ async def health() -> JSONResponse:
     return JSONResponse(
         {
             "ok": True,
+            "database_mode": "postgres" if is_postgres() else "sqlite",
+            "database_url_set": bool(DATABASE_URL),
             "database": str(DATABASE_PATH),
+            "listings_table": LISTINGS_TABLE,
+            "google_sso_enabled": bool(GOOGLE_CLIENT_ID),
             "whatsapp_forward_mode": WHATSAPP_FORWARD_MODE,
             "whatsapp_sender_url": WHATSAPP_SENDER_URL,
             "target_chat_id": WHATSAPP_TARGET_CHAT_ID,
         }
     )
+
+
+@app.get("/api/auth/config")
+async def auth_config() -> JSONResponse:
+    return JSONResponse(
+        {
+            "enabled": bool(GOOGLE_CLIENT_ID),
+            "google_client_id": GOOGLE_CLIENT_ID if GOOGLE_CLIENT_ID else None,
+        }
+    )
+
+
+@app.post("/api/auth/google")
+async def google_auth(payload: GoogleAuthRequest) -> JSONResponse:
+    token_info = verify_google_id_token(payload.id_token)
+    user = {
+        "sub": token_info.get("sub"),
+        "email": token_info.get("email"),
+        "name": token_info.get("name"),
+        "picture": token_info.get("picture"),
+        "email_verified": bool(token_info.get("email_verified")),
+    }
+    return JSONResponse({"ok": True, "user": user})
 
 
 @app.get("/api/listings")

@@ -3,7 +3,7 @@
 This repo contains a proof of concept for:
 
 1. collecting event details from a frontend form
-2. saving the event in a FastAPI backend with SQLite
+2. saving the event in a FastAPI backend (SQLite or PostgreSQL/RDS)
 3. forwarding the saved event to a WhatsApp group through a separate Node.js sender service using `whatsapp-web.js`
 
 ## Repo structure
@@ -51,10 +51,13 @@ Copy `.env.example` and adapt values for your machine or EC2 host.
 Backend values:
 
 - `EVENTS_DB_PATH`
+- `DATABASE_URL` (optional; if set, backend uses PostgreSQL/RDS)
+- `LISTINGS_TABLE` (recommended: `poc_whatsapp_listings`)
 - `WHATSAPP_FORWARD_MODE`
 - `WHATSAPP_SENDER_URL`
 - `WHATSAPP_TARGET_CHAT_ID`
 - `BACKEND_PORT`
+- `GOOGLE_CLIENT_ID` (optional; enables Google SSO button)
 
 Sender values:
 
@@ -66,3 +69,5 @@ Sender values:
 - `whatsapp-web.js` is useful for a group-posting POC, but it is not the official Meta business API.
 - The WhatsApp linked-device session is stored on disk. Keep the sender service on persistent storage.
 - If you redeploy or wipe the auth folder, you may need to scan the QR again.
+- For shared RDS, keep this POC on a dedicated table (default: `poc_whatsapp_listings`) to avoid touching production tables.
+- Google SSO uses Google Identity Services in frontend and ID token verification in backend (`/api/auth/google`).
