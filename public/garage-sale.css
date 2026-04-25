@@ -183,6 +183,10 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
 }
 
+.hero-grid.hero-grid-solo {
+  grid-template-columns: 1fr;
+}
+
 @media (max-width: 960px) {
   .hero-grid { grid-template-columns: 1fr; gap: 40px; }
 }

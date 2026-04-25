@@ -6,7 +6,7 @@ function Landing({ onStart }) {
   return (
     <div className="fade-in">
       <section className="hero">
-        <div className="hero-grid">
+        <div className="hero-grid hero-grid-solo">
           <div>
             <span className="eyebrow">
               <span className="dot"></span>
@@ -32,31 +32,6 @@ function Landing({ onStart }) {
               <div><strong>&lt; 3 min</strong>To post a listing</div>
               <div><strong>2,400+</strong>Riders in the group</div>
               <div><strong>Instant</strong>To WhatsApp</div>
-            </div>
-          </div>
-          <div className="hero-visual">
-            <div className="hero-phone">
-              <div className="mini-feed">
-                <div className="mini-brand">Garage sale</div>
-                <div className="mini-card">
-                  <span className="mini-tag">Motorcycle</span>
-                  <h5>Royal Enfield Classic 350</h5>
-                  <p>Bengaluru · 14,200 km · 1st owner</p>
-                  <div className="price">₹1,45,000</div>
-                </div>
-                <div className="mini-card">
-                  <span className="mini-tag">Helmet</span>
-                  <h5>Shoei GT-Air II · M</h5>
-                  <p>Mumbai · excellent · pinlock incl.</p>
-                  <div className="price">₹28,000</div>
-                </div>
-                <div className="mini-card">
-                  <span className="mini-tag">Luggage</span>
-                  <h5>Viaterra Claw Tank Bag</h5>
-                  <p>Pune · 20L · like new</p>
-                  <div className="price">₹4,800</div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
