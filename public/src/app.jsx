@@ -86,6 +86,17 @@ function App() {
     }));
     navigate("/form");
   }
+  function handleSignOut() {
+    setUser(null);
+    setSignInOpen(false);
+    localStorage.removeItem("ws_google_user");
+    try {
+      if (window.google?.accounts?.id) {
+        window.google.accounts.id.disableAutoSelect();
+      }
+    } catch (_error) {}
+    navigate("/");
+  }
   async function handleSubmit() {
     setSubmitError("");
     const payload = {
@@ -147,7 +158,7 @@ function App() {
 
   return (
     <>
-      <SiteNav route={route} onNavigate={navigate} user={user} onSignIn={handleStart} />
+      <SiteNav route={route} onNavigate={navigate} user={user} onSignIn={handleStart} onSignOut={handleSignOut} />
       {route === "/" && <Landing onStart={handleStart} />}
       {route === "/form" && (
         user

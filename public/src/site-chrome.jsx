@@ -1,5 +1,5 @@
 /* global React */
-function SiteNav({ route, onNavigate, user, onSignIn }) {
+function SiteNav({ route, onNavigate, user, onSignIn, onSignOut }) {
   return (
     <header className="site-nav">
       <div className="site-nav-inner">
@@ -16,6 +16,14 @@ function SiteNav({ route, onNavigate, user, onSignIn }) {
           <div className="signed-in-chip">
             <div className="avatar">{user.avatar}</div>
             <span className="name">{user.name.split(" ")[0]}</span>
+            <button
+              type="button"
+              className="btn btn-ghost"
+              style={{ padding: "6px 12px", fontSize: 12, marginLeft: 8 }}
+              onClick={onSignOut}
+            >
+              Logout
+            </button>
           </div>
         ) : (
           <button className="nav-cta" onClick={onSignIn}>
