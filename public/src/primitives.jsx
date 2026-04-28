@@ -10,11 +10,12 @@ function Field({ label, hint, children, full }) {
   );
 }
 
-function TextInput({ value, onChange, placeholder, type = "text", prefix }) {
+function TextInput({ value, onChange, placeholder, type = "text", inputMode, prefix }) {
   const input = (
     <input
       className="input"
       type={type}
+      inputMode={inputMode}
       value={value ?? ""}
       placeholder={placeholder}
       onChange={e => onChange(e.target.value)}

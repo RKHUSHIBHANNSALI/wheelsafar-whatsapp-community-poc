@@ -74,7 +74,7 @@ function StepSize({ state, update }) {
   const isMotorcycle = state.category === "motorcycle";
   const isLuggage = state.category === "luggage";
   const isBoots = state.category === "riding-gears" && state.type === "boots";
-  const sizes = getSizeOptions(state.category, state.type);
+  const sizes = getSizeOptions(state.category, state.type, state.sizeSystem);
 
   return (
     <div className="fade-in">
@@ -94,7 +94,7 @@ function StepSize({ state, update }) {
         <div className="panel">
           <Field label="Capacity" hint="Usually printed on the tag or listed on the brand's website">
             <TextInput value={state.size} onChange={v => update({ size: v })}
-              type="number" placeholder="20" prefix="L" />
+              type="text" inputMode="numeric" placeholder="20" prefix="L" />
           </Field>
         </div>
       ) : isBoots ? (
@@ -186,7 +186,7 @@ function StepDetails({ state, update }) {
             </Field>
             <Field label="Odometer">
               <TextInput value={state.odometer} onChange={v => update({ odometer: v })}
-                type="number" placeholder="25000" prefix="km" />
+                type="text" inputMode="numeric" placeholder="25000" prefix="km" />
             </Field>
             <Field label="Number of owners">
               <Select value={state.owners} onChange={v => update({ owners: v })} options={OWNER_COUNTS} placeholder="Select" />
@@ -304,7 +304,7 @@ function StepPrice({ state, update }) {
         <div className="form-grid">
           <Field label="Asking price" hint="In Indian rupees">
             <TextInput value={state.price} onChange={v => update({ price: v })}
-              type="number" placeholder="5000" prefix="₹" />
+              type="text" inputMode="numeric" placeholder="5000" prefix="₹" />
           </Field>
           <Field label="Price type">
             <Segmented value={state.priceType} onChange={v => update({ priceType: v })}
