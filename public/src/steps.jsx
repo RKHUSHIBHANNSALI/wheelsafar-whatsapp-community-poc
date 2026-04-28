@@ -43,7 +43,7 @@ function StepType({ state, update }) {
       <Crumbs items={[{ label: "Category", value: categoryLabel(state.category) }]} />
       {freeText ? (
         <div className="panel">
-          <Field label="Item type" hint="e.g. Crash guard, phone mount, action camera, intercom">
+          <Field label="Item type" required hint="e.g. Crash guard, phone mount, action camera, intercom">
             <TextInput value={state.type} onChange={v => update({ type: v })} placeholder="Type or paste here" />
           </Field>
         </div>
@@ -58,7 +58,7 @@ function StepType({ state, update }) {
           </div>
           {state.category === "luggage" && state.type === "other" && (
             <div className="panel" style={{ marginTop: 16 }}>
-              <Field label="Other luggage type">
+              <Field label="Other luggage type" required>
                 <TextInput value={state.customType} onChange={v => update({ customType: v })}
                   placeholder="e.g. Hydration pack, seat bag, rain cover…" />
               </Field>
@@ -92,7 +92,7 @@ function StepSize({ state, update }) {
 
       {isLuggage ? (
         <div className="panel">
-          <Field label="Capacity" hint="Usually printed on the tag or listed on the brand's website">
+          <Field label="Capacity" required hint="Usually printed on the tag or listed on the brand's website">
             <TextInput value={state.size} onChange={v => update({ size: v })}
               type="text" inputMode="numeric" placeholder="20" prefix="L" />
           </Field>
@@ -100,20 +100,20 @@ function StepSize({ state, update }) {
       ) : isBoots ? (
         <>
           <div className="panel">
-            <Field label="Size system">
+            <Field label="Size system" required>
               <Segmented value={state.sizeSystem} onChange={v => update({ sizeSystem: v })}
                 options={["UK","US","EU"]} />
             </Field>
           </div>
           <div className="panel">
-            <Field label="Size">
+            <Field label="Size" required>
               <PillGroup value={state.size} onChange={v => update({ size: v })} options={sizes} />
             </Field>
           </div>
         </>
       ) : (
         <div className="panel">
-          <Field label="Size">
+          <Field label="Size" required>
             <PillGroup value={state.size} onChange={v => update({ size: v })} options={sizes} />
           </Field>
         </div>
@@ -149,14 +149,14 @@ function StepDetails({ state, update }) {
       <div className="panel">
         <h3>Brand & model</h3>
         <div className="form-grid">
-          <Field label="Brand">
+          <Field label="Brand" required>
             {isMotorcycle
               ? <Select value={state.brand} onChange={v => update({ brand: v })}
                   options={MOTORCYCLE_BRANDS} placeholder="Select brand" />
               : <TextInput value={state.brand} onChange={v => update({ brand: v })}
                   placeholder="e.g. Alpinestars, Rynox, Shoei" />}
           </Field>
-          <Field label="Model">
+          <Field label="Model" required={isMotorcycle}>
             <TextInput value={state.model} onChange={v => update({ model: v })}
               placeholder="e.g. GT-Air II" />
           </Field>
@@ -166,7 +166,7 @@ function StepDetails({ state, update }) {
                 placeholder="e.g. Metallic Silver" />
             </Field>
           )}
-          <Field label="Condition">
+          <Field label="Condition" required>
             <Select value={state.condition} onChange={v => update({ condition: v })}
               options={CONDITIONS} placeholder="How is it?" />
           </Field>
@@ -178,7 +178,7 @@ function StepDetails({ state, update }) {
         <div className="panel">
           <h3>Motorcycle specifics</h3>
           <div className="form-grid">
-            <Field label="Year of manufacture">
+            <Field label="Year of manufacture" required>
               <Select value={state.mfgYear} onChange={v => update({ mfgYear: v })} options={YEARS} placeholder="Select year" />
             </Field>
             <Field label="Year of registration">
@@ -302,7 +302,7 @@ function StepPrice({ state, update }) {
       </div>
       <div className="panel">
         <div className="form-grid">
-          <Field label="Asking price" hint="In Indian rupees">
+            <Field label="Asking price" required hint="In Indian rupees">
             <TextInput value={state.price} onChange={v => update({ price: v })}
               type="text" inputMode="numeric" placeholder="5000" prefix="₹" />
           </Field>
@@ -310,7 +310,7 @@ function StepPrice({ state, update }) {
             <Segmented value={state.priceType} onChange={v => update({ priceType: v })}
               options={[{ value: "fixed", label: "Fixed" },{ value: "negotiable", label: "Negotiable" }]} />
           </Field>
-          <Field label="Location" full>
+          <Field label="Location" required full>
             <TextInput value={state.location} onChange={v => update({ location: v })}
               placeholder="City · locality (e.g. Bengaluru, Indiranagar)" />
           </Field>
@@ -422,7 +422,7 @@ function StepReason({ state, update }) {
         <p>The human part. Buyers read this first after the specs — keep it honest and short.</p>
       </div>
       <div className="panel">
-        <Field label="Description" hint="Condition notes, upgrades, fit quirks, what's included…">
+        <Field label="Description" required hint="Condition notes, upgrades, fit quirks, what's included…">
           <TextArea value={state.description} onChange={v => update({ description: v })}
             rows={4} placeholder="e.g. Ridden for 14,000 km, serviced at authorised centre, comes with top box and original tool kit." />
         </Field>
@@ -449,10 +449,10 @@ function StepSeller({ state, update }) {
       <div className="panel">
         <h3>Your details</h3>
         <div className="form-grid">
-          <Field label="Full name">
+          <Field label="Full name" required>
             <TextInput value={state.sellerName} onChange={v => update({ sellerName: v })} placeholder="Full name" />
           </Field>
-          <Field label="Phone">
+          <Field label="Phone" required>
             <TextInput value={state.sellerPhone} onChange={v => update({ sellerPhone: v })}
               placeholder="+91 98xxx xxxxx" />
           </Field>
@@ -470,7 +470,7 @@ function StepSeller({ state, update }) {
       </div>
 
       <div className="panel">
-        <h3>Confirm & consent</h3>
+        <h3>Confirm & consent <span className="required-marker" aria-hidden="true">*</span></h3>
         <CheckItem checked={state.consent} onChange={v => update({ consent: v })}
           sub="Required before we can post to the WhatsApp group.">
           I confirm that I own this item or am authorised to sell it, and I agree to have this listing posted in the Garage Sale WhatsApp group.

@@ -105,9 +105,9 @@ function defaultState() {
     description: "",
     reason: "",
     // Step 8 — seller & consent
-    sellerName: MOCK_USER.name,
-    sellerPhone: MOCK_USER.phone,
-    sellerEmail: MOCK_USER.email,
+    sellerName: "",
+    sellerPhone: "",
+    sellerEmail: "",
     contactPref: "whatsapp",
     consent: false,
   };
@@ -145,10 +145,16 @@ const STEP_KICKER = {
   seller: "08 — How buyers reach you",
 };
 
-function getSizeOptions(category, type) {
+function getSizeOptions(category, type, sizeSystem = "") {
   if (category === "motorcycle") return ["0 – 250cc", "250 – 650cc", "650cc & above"];
   if (category === "riding-gears") {
-    if (type === "boots") return ["5","6","7","8","9","10","11","12","13"];
+    if (type === "boots") {
+      const system = (sizeSystem || "").toUpperCase();
+      if (system === "EU") return ["38","39","40","41","42","43","44","45","46","47"];
+      if (system === "US") return ["6","7","8","9","10","11","12","13","14"];
+      // Default to UK when system is not selected yet.
+      return ["5","6","7","8","9","10","11","12","13"];
+    }
     if (type === "helmet") return ["XS","S","M","L","XL","2XL"];
     return ["XS","S","M","L","XL","2XL","3XL","4XL"];
   }

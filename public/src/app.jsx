@@ -41,6 +41,12 @@ function App() {
       if (raw) {
         const parsed = JSON.parse(raw);
         setUser(parsed);
+        setFormState(prev => ({
+          ...prev,
+          sellerName: (parsed?.name || prev.sellerName || "").trim(),
+          sellerPhone: (parsed?.phone || prev.sellerPhone || "").trim(),
+          sellerEmail: (parsed?.email || prev.sellerEmail || "").trim(),
+        }));
       }
     } catch (_error) {}
   }, []);
@@ -80,9 +86,9 @@ function App() {
     localStorage.setItem("ws_google_user", JSON.stringify(u));
     setFormState(prev => ({
       ...prev,
-      sellerName: u.name || prev.sellerName,
-      sellerPhone: u.phone || prev.sellerPhone,
-      sellerEmail: u.email || prev.sellerEmail,
+      sellerName: (u?.name || prev.sellerName || "").trim(),
+      sellerPhone: (u?.phone || prev.sellerPhone || "").trim(),
+      sellerEmail: (u?.email || prev.sellerEmail || "").trim(),
     }));
     navigate("/form");
   }
@@ -97,6 +103,19 @@ function App() {
     } catch (_error) {}
     navigate("/");
   }
+
+  function toMediaPayload(photo) {
+    const dataUrl = photo?.dataUrl || "";
+    const match = dataUrl.match(/^data:(.+);base64,(.+)$/);
+    if (!match) return null;
+    const [, mimeType, dataBase64] = match;
+    return {
+      name: photo?.name || "photo.jpg",
+      mime_type: mimeType,
+      data_base64: dataBase64,
+    };
+  }
+
   async function handleSubmit() {
     setSubmitError("");
     const payload = {
@@ -122,9 +141,10 @@ function App() {
       reg: formState.regYear || "",
       description: formState.description || "",
       photos_names: (formState.photos || []).map((photo) => photo.name).slice(0, 2),
+      photos_media: (formState.photos || []).map(toMediaPayload).filter(Boolean).slice(0, 2),
       reason: formState.reason || "",
-      seller_name: formState.sellerName || "",
-      seller_phone: formState.sellerPhone || "",
+      seller_name: (formState.sellerName || user?.name || "").trim(),
+      seller_phone: (formState.sellerPhone || user?.phone || "").trim(),
       location_consent: Boolean(formState.consent),
       call_preference: formState.contactPref || "",
     };

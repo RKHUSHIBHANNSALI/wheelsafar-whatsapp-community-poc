@@ -1,9 +1,12 @@
 /* global React */
 
-function Field({ label, hint, children, full }) {
+function Field({ label, hint, children, full, required = false }) {
   return (
     <div className={`field ${full ? "full" : ""}`}>
-      <span className="field-label">{label}</span>
+      <span className="field-label">
+        {label}
+        {required ? <span className="required-marker" aria-hidden="true"> *</span> : null}
+      </span>
       {children}
       {hint && <span className="help">{hint}</span>}
     </div>
